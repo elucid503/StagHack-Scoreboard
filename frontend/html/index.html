@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+
+    <title>StagHack Scoreboard</title>
+
+    <link rel="stylesheet" href="../styles/index.css">
+
+    <!-- JQuery -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Page Scripts -->
+
+    <script src="../scripts/index.js" type="module"></script>
+
+</head>
+
+<!-- We can use HTMX if needed to swap out frontend elements with content from the backend.
+I generally don't like big bulky frameworks like next.js or react/angular, especially not for something as small as this. -->
+
+<body>
+
+    <div class="title-container">
+
+        <div class="title-text">2024 StagHack</div>
+        <div class="title-subtext">Scoreboard</div>
+
+    </div>
+
+    <div class="score-display">
+
+        <div class="score-text">Current Score</div>
+        <div class="score-value" id="score">Not Available</div>
+
+        <hl></hl> <!-- Horizontal Line -->
+
+        <div class="score-controls">
+
+            <div class="button increment" data-direction="up">Add</div>
+            <div class="button increment" data-direction="down">Subtract</div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

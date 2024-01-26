@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root { /* CSS Variables, I usually use something like these on many of my other sites, just copied them over, can be tweaked */
+
+    --color-primary: #2b2b2b;
+    --color-secondary: #424242;
+
+    --color-button: #606060;
+
+    --color-text: #eaeefc;
+    --color-text-secondary: #b3b3b3;
+
+    --color-accent: #deccf8;
+    --color-accent-secondary: #eee4fd;
+
+    --border-radius-large: 15px;
+    --border-radius-medium: 10px;
+    --border-radius-small: 5px;
+
+    --font-size-large: clamp(1.5rem, 2.5vw, 2rem);
+    --font-size-medium: clamp(1rem, 2.5vw, 1.5rem);
+    --font-size-small: clamp(0.5rem, 2.5vw, 1rem);
+
+}
+
+body {
+
+    font-family: "Urbanist", sans-serif;
+    font-weight: 600;
+
+    background-color: var(--color-primary);
+
+    color: var(--color-text);
+
+}
+
+hl {
+
+    border: 1px solid var(--color-text);
+    margin: 1rem 0;
+
+    width: 100%;
+
+}
+
+.title-container, .score-display {
+
+    margin-left: auto; margin-right: auto;
+    justify-content: center; align-items: center;
+
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 4rem;
+
+    background-color: var(--color-secondary);
+    padding: 15px;
+
+    width: fit-content;
+
+    border-radius: var(--border-radius-large);
+
+}
+
+.title-text {
+
+    font-size: var(--font-size-large);
+    color: var(--color-accent);
+
+}
+
+.title-subtext {
+
+    font-size: var(--font-size-medium);
+    color: var(--color-accent-secondary);
+
+}
+
+.score-display {
+
+    font-size: var(--font-size-large);
+
+}
+
+.score-display .score-text {
+
+    font-size: var(--font-size-medium);
+    margin-bottom: 1rem;
+
+}
+
+.score-controls {
+
+    display: flex;
+
+}
+
+.button {
+
+    background-color: var(--color-button);
+
+    padding: 10px;
+
+    margin: 5px;
+
+    font-size: var(--font-size-small);
+
+    border-radius: var(--border-radius-medium);
+
+    cursor: pointer;
+
+    transition: filter 0.2s;
+
+    /* To disable text selection since this is a plain element */
+
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+
+}
+
+.score-controls .button:hover {
+
+    filter: brightness(1.10);
+
+}
