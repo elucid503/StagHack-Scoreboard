@@ -41,7 +41,7 @@ app.get('/api', (_req, res) => {
 
 async function UpdateScore(NewScore: number): Promise<boolean> {
 
-    let data = await readFile("./score.json", "utf8").catch(err => {
+    let data = await readFile("./scores.json", "utf8").catch(err => {
 
         console.log(`FILE ERR: ${err}`);
         return null;
@@ -53,7 +53,7 @@ async function UpdateScore(NewScore: number): Promise<boolean> {
     let stored = JSON.parse(data);
     stored.CurrentScore = NewScore;
 
-    await writeFile("./score.json", JSON.stringify(stored));
+    await writeFile("./scores.json", JSON.stringify(stored));
 
     return true;
 
@@ -61,7 +61,7 @@ async function UpdateScore(NewScore: number): Promise<boolean> {
 
 async function GetScore(): Promise<number> {
 
-    let data = await readFile("./score.json", "utf8").catch(err => {
+    let data = await readFile("./scores.json", "utf8").catch(err => {
 
         console.log(`FILE ERR: ${err}`);
         return null;
