@@ -21,6 +21,10 @@ app.use(express.static('../frontend/')); // For serving HTML files
 
 app.use(cors());
 
+// Parse JSON
+
+app.use(express.json());
+
 // Log route requests (before they are handled)
 
 app.use((req, _res, next) => {

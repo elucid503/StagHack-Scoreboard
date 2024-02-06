@@ -1,5 +1,7 @@
 import type { Response, Request } from "express"
 
+import { ScoreOrTeamChangedEmitter} from "../../../index.ts";
+
 import {DeleteTeam} from "../../../utils/files.ts";
 
 /**
@@ -25,6 +27,8 @@ export const post = async (req: Request, res: Response) => {
         res.json({
             TeamID: TeamID
         });
+
+        ScoreOrTeamChangedEmitter.emit("ScoreOrTeamChanged");
 
     } else {
 

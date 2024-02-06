@@ -24,13 +24,23 @@ export const ws = async (ws: WebSocket) => {
 
     // Listen for changes to the teams
 
-    ScoreOrTeamChangedEmitter.on("ScoreOrTeamChanged", async () => {
+    const Listener = async () => {
 
         // Something happened, so send to any connected clients
 
         const Teams = await GetAllTeams();
 
         ws.send(JSON.stringify({ Status: 200, Message: "Score or Team Changed", Teams: Teams }));
+
+    }
+
+    ScoreOrTeamChangedEmitter.on("ScoreOrTeamChanged", Listener);
+
+    ws.on("close", () => {
+
+        // Remove the listener
+
+        ScoreOrTeamChangedEmitter.off("ScoreOrTeamChanged", Listener);
 
     });
 

@@ -1,6 +1,7 @@
 import type { Response, Request } from "express"
 
 import {RegisterTeam} from "../../../utils/files.ts";
+import {ScoreOrTeamChangedEmitter} from "../../../index.ts";
 
 /**
  *
@@ -28,6 +29,8 @@ export const post = async (req: Request, res: Response) => {
             TeamID: GenerateID,
             TeamName: TeamName
         });
+
+        ScoreOrTeamChangedEmitter.emit("ScoreOrTeamChanged");
 
     } else {
 

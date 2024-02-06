@@ -61,14 +61,70 @@ async function MakeRequestToBackend(Route, Body){
 
 }
 
+async function IncrementTeamScore(TeamID, Direction) {
+
+    const response = await MakeRequestToBackend(Routes.UpdateTeamScore, { TeamID: TeamID, Direction: Direction });
+
+    if (!response) {
+
+        ShowError("Failed to update team score.");
+        return;
+
+    }
+
+    return response;
+
+}
+
+async function CreateTeam(TeamName) {
+
+    const response = await MakeRequestToBackend(Routes.CreateTeam, { TeamName: TeamName });
+
+    if (!response) {
+
+        ShowError("Failed to create team.");
+        return;
+
+    }
+
+    return response;
+
+}
+
+async function DeleteTeam(TeamID) {
+
+    const response = await MakeRequestToBackend(Routes.DeleteTeam, { TeamID: TeamID });
+
+    if (!response) {
+
+        ShowError("Failed to delete team.");
+        return;
+
+    }
+
+    return response;
+
+}
+
 function HandleTeamsUpdate(Teams) {
+
+    $(".team").remove();
 
     Teams.sort((a, b) => b.CurrentScore - a.CurrentScore);
 
     Teams.forEach((team) => {
 
-        const HTML = `<div class="team-name">${team.TeamName}</div>
+        let HTML = `<div class="team-name">${team.TeamName}</div>
             <div class="team-score">${team.CurrentScore}</div>`
+
+        if (window.IsControl) {
+
+            HTML += `<div class="score-controls">
+                <div class="button increment" data-team-id="${team.TeamID}">Add</div>
+                <div class="button delete" data-team-id="${team.TeamID}">Subtract</div>
+            </div>`;
+
+        }
 
         const Element = document.createElement("div");
         Element.className = "team";
@@ -78,6 +134,12 @@ function HandleTeamsUpdate(Teams) {
         Element.innerHTML = HTML;
 
         Elements.Teams.append(Element);
+
+        if (window.IsControl) {
+
+            Element.style.height = "100px";
+
+        }
 
     });
 
@@ -96,27 +158,6 @@ function HandleTeamsUpdate(Teams) {
     StyleTeams();
 
 }
-
-async function GetAllTeams() {
-
-    const response = await MakeRequestToBackend(Routes.GetAllScores);
-
-    if (!response) {
-
-        ShowError("Failed to get initial scores from the API.");
-        return;
-
-    }
-
-    const Teams = response.Teams;
-
-    // Sort by score
-
-    HandleTeamsUpdate(Teams);
-
-}
-
-GetAllTeams().then(() => {});
 
 // connect to websocket to listen for updates
 
@@ -138,7 +179,6 @@ function InitWebSocket() {
 
         if (data.Teams) {
 
-            Elements.Teams.empty();
             HandleTeamsUpdate(data.Teams);
 
         }
@@ -146,6 +186,8 @@ function InitWebSocket() {
     }
 
 }
+
+InitWebSocket();
 
 function StyleTeams() { // Assumes all teams are placed
 
@@ -185,8 +227,115 @@ function StyleTeams() { // Assumes all teams are placed
 
 }
 
+function CreateClickableList(contents, ids) {
+
+    const X = (window.innerWidth / 2) - 100;
+    const Y = (window.innerHeight) - 380;
+
+    const List = document.createElement("div");
+
+    List.className = "list-container";
+    List.style.display = "none";
+
+    List.innerHTML = `<div class="list-contents">`;
+
+    contents.forEach((content) => {
+
+        const ID = ids[contents.indexOf(content)];
+
+        List.innerHTML += `<div class="list-item" data-id="${ID}">${content}</div>`;
+
+    });
+
+    List.innerHTML += `</div>`;
+
+    document.body.appendChild(List);
+
+    List.style.left = `${X}px`;
+    List.style.top = `${Y}px`;
+
+    List.style.display = "block";
+
+    return List;
+
+}
+
 StyleTeams();
 
+// Admin Button Listeners
 
+if (window.IsControl) {
 
+    Elements.Teams.on("click", ".button.increment", async (event) => {
+
+        const TeamID = event.target.dataset.teamId;
+
+        await IncrementTeamScore(TeamID, "up");
+
+    });
+
+    Elements.Teams.on("click", ".button.delete", async (event) => {
+
+        const TeamID = event.target.dataset.teamId;
+
+        await IncrementTeamScore(TeamID, "down");
+
+    });
+
+    $(".button.add-team").on("click", async () => {
+
+        if (!TeamName) return;
+
+        await CreateTeam(TeamName);
+
+    });
+
+    $(".button.rm-team").on("click", async () => {
+
+        const OtherLists = $(".list-container");
+        let ToReturn = false;
+
+        OtherLists.each((index, list) => {
+
+            list.remove();
+            ToReturn = true;
+
+        });
+
+        if (ToReturn) return;
+
+        // Show list of teams
+
+        const Teams = $(".team");
+
+        const TeamNames = [];
+        const TeamIDs = [];
+
+        Teams.each((index, team) => {
+
+            const Name = team.querySelector(".team-name").innerText;
+            const ID = team.id;
+
+            TeamNames.push(Name);
+            TeamIDs.push(ID);
+
+        });
+
+        const List = CreateClickableList(TeamNames, TeamIDs);
+
+        List.addEventListener("click", async (event) => {
+
+            const TeamID = event.target.dataset.id;
+
+            if (!TeamID) return;
+
+            await DeleteTeam(TeamID);
+
+            List.remove();
+
+        });
+
+    });
+
+}
 

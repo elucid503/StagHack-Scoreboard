@@ -102,7 +102,9 @@ export async function DeleteTeam(TeamID: string): Promise<boolean> {
 
     if (!StoredTeams) return false;
 
-    delete StoredTeams[TeamID];
+    // Splice
+
+    StoredTeams.splice(StoredTeams.findIndex((Team: Team) => Team.TeamID == TeamID), 1);
 
     return await Bun.write(File, JSON.stringify(StoredTeams)).catch(err => {
 

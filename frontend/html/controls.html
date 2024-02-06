@@ -13,9 +13,19 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <!-- Boxicons -->
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <!-- Page Scripts -->
 
     <script src="../scripts/index.js" type="module"></script>
+
+    <script>
+
+        window.IsControl = true;
+
+    </script>
 
 </head>
 
@@ -24,21 +34,41 @@ I generally don't like big bulky frameworks like next.js or react/angular, espec
 
 <body>
 
-    <div class="title-container">
+<div class="error-backdrop" style="display: none"></div>
 
-        <div class="title-text">2024 StagHack</div>
-        <div class="title-subtext">Scoreboard</div>
+<div class="error-container" style="display: none">
+
+    <div class="error-title">Error</div>
+    <div class="error-text">Error content here</div>
+
+</div>
+
+<div class="title-container">
+
+    <div class="title-text">2024 StagHack</div>
+    <div class="title-subtext">Scoreboard</div>
+    <div class="admin-callout">Admin Panel</div>
+
+</div>
+
+<div class="teams">
+
+    <div class="no-teams" style="display: none">
+
+        <i class='bx bxs-folder-open'></i>
+        <div class="no-teams-text">There are no teams, yet.</div>
 
     </div>
 
-    <div class="score-display">
+</div>
 
+<div class="control-bar">
 
+    <div class="button add-team">Add A Team</div>
+    <div class="button rm-team">Remove A Team</div>
 
+</div>
 
-        <hl></hl> <!-- Horizontal Line -->
-
-    </div>
 
 </body>
 
