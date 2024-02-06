@@ -14,7 +14,11 @@ export async function UpdateScore(TeamID: string, NewScore: number): Promise<boo
 
     if (!StoredTeams) return false;
 
-    StoredTeams[TeamID].CurrentScore = NewScore;
+    const Team = (StoredTeams as Team[]).find((Team) => Team.TeamID === TeamID);
+
+    if (!Team) return false;
+
+    Team.CurrentScore = NewScore;
 
     return await Bun.write(File, JSON.stringify(StoredTeams)).catch(err => {
 
@@ -38,7 +42,7 @@ export async function GetScore(TeamID: string): Promise<number> {
 
     if (!Teams) return -1;
 
-    return Teams[TeamID]?.CurrentScore ?? -1; // ?? because || doesn't work for 0 (gotta love javascript!)
+    return (Teams as Team[]).find((Team) => Team.TeamID === TeamID)?.CurrentScore ?? -1; // ?? because || doesn't work for 0 (gotta love javascript!)
 
 }
 
@@ -72,13 +76,13 @@ export async function RegisterTeam(TeamID: string, TeamName: string): Promise<bo
 
     if (!StoredTeams) return false;
 
-    StoredTeams[TeamID] = {
+    StoredTeams.push({
 
-        TeamID: TeamID,
-        TeamName: TeamName,
-        CurrentScore: 0,
+        TeamID,
+        TeamName,
+        CurrentScore: 0
 
-    } satisfies Team;
+    } satisfies Team)
 
     return await Bun.write(File, JSON.stringify(StoredTeams)).catch(err => {
 

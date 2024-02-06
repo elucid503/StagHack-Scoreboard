@@ -34,7 +34,21 @@ I generally don't like big bulky frameworks like next.js or react/angular, espec
 
 <body>
 
-<div class="error-backdrop" style="display: none"></div>
+<div class="blur-backdrop" style="display: none"></div>
+
+<dialog class="input-modal" style="display: none">
+
+    <div class="input-modal-title">Add A Team</div>
+    <div class="input-modal-text">Enter the name of the team.</div>
+    <label>
+        <input type="text" class="input-modal-input">
+    </label>
+    <div class="input-modal-buttons">
+        <div id="AddTeamCancel" class="button input-modal-cancel">Cancel</div>
+        <div id="AddTeamConfirm" class="button input-modal-confirm">Add</div>
+    </div>
+
+</dialog>
 
 <div class="error-container" style="display: none">
 
@@ -69,6 +83,11 @@ I generally don't like big bulky frameworks like next.js or react/angular, espec
 
 </div>
 
+<div class="popup-notification" style="display: none">
+
+    <div class="popup-notification-text"></div>
+
+</div>
 
 </body>
 

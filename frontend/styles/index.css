@@ -67,7 +67,7 @@ hl {
 
 }
 
-.error-backdrop {
+.blur-backdrop {
 
     position: absolute;
     width: 100%; height: 100%;
@@ -318,5 +318,100 @@ hl {
     filter: brightness(1.10);
 
     cursor: pointer;
+
+}
+
+.input-modal {
+
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: #424242;
+    border-radius: var(--border-radius-large);
+    border: none;
+
+    max-width: 500px;
+
+    z-index: 5;
+
+    color: var(--color-text);
+
+}
+
+.input-modal-title {
+
+    font-size: var(--font-size-large);
+    color: var(--color-accent);
+
+    margin-bottom: 0.5rem;
+
+}
+
+.input-modal-text {
+
+    font-size: var(--font-size-small);
+    color: var(--color-accent-secondary);
+
+    margin-bottom: 1rem;
+
+}
+
+.input-modal-input {
+
+    font-size: var(--font-size-small);
+    padding: 10px;
+
+    border-radius: var(--border-radius-medium);
+
+    margin-bottom: 1rem;
+
+    background-color: #606060;
+
+    border: none;
+
+    color: var(--color-text);
+
+    text-align: center;
+
+    font-family: "Urbanist", sans-serif;
+
+}
+
+.input-modal-input:focus {
+
+    outline: none;
+
+}
+
+.input-modal-buttons {
+
+    display: flex;
+
+}
+
+.popup-notification {
+
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+
+    margin: auto auto 8.5rem auto;
+
+    justify-content: center;
+
+    height: fit-content;
+    width: fit-content;
+
+    background-color: var(--color-secondary);
+    border-radius: var(--border-radius-large);
+
+    padding: 15px;
+
+    color: var(--color-text);
 
 }
