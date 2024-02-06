@@ -1,21 +1,29 @@
 import Bun from "bun";
 
-export async function UpdateScore(NewScore: number): Promise<boolean> {
+export interface Team {
 
-    const File = Bun.file("./storage/scores.json");
+    TeamID: string;
+    TeamName: string;
+    CurrentScore: number;
 
-    const StoredScores = await File.json().catch(err => {
+}
+
+export async function UpdateScore(TeamID: string, NewScore: number): Promise<boolean> {
+
+    const File = Bun.file("./storage/teams.json");
+
+    const StoredTeams = await File.json().catch(err => {
 
         console.log(`FILE ERR: ${err}`);
         return null;
 
     });
 
-    if (!StoredScores) return false;
+    if (!StoredTeams) return false;
 
-    StoredScores.CurrentScore = NewScore;
+    StoredTeams[TeamID].CurrentScore = NewScore;
 
-    return await Bun.write(File, JSON.stringify(StoredScores)).catch(err => {
+    return await Bun.write(File, JSON.stringify(StoredTeams)).catch(err => {
 
         console.log(`FILE ERR: ${err}`);
         return false;
@@ -24,19 +32,107 @@ export async function UpdateScore(NewScore: number): Promise<boolean> {
 
 }
 
-export async function GetScore(): Promise<number> {
+export async function GetScore(TeamID: string): Promise<number> {
 
-    const File = Bun.file("./storage/scores.json");
+    const File = Bun.file("./storage/teams.json");
 
-    const Scores = await File.json().catch(err => {
+    const Teams = await File.json().catch(err => {
 
         console.log(`FILE ERR: ${err}`);
         return null;
 
     });
 
-    if (!Scores) return -1;
+    if (!Teams) return -1;
 
-    return Scores.CurrentScore ?? -1; // ?? because || doesn't work for 0 (gotta love javascript!)
+    return Teams[TeamID]?.CurrentScore ?? -1; // ?? because || doesn't work for 0 (gotta love javascript!)
+
+}
+
+export async function GetAllTeams(): Promise<Team[]> {
+
+    const File = Bun.file("./storage/teams.json");
+
+    const Teams = await File.json().catch(err => {
+
+        console.log(`FILE ERR: ${err}`);
+        return null;
+
+    });
+
+    if (!Teams) return [];
+
+    return Object.values(Teams);
+
+}
+
+export async function GetTeam(TeamID: string): Promise<Team | null> {
+
+    const File = Bun.file("./storage/teams.json");
+
+    const Teams = await File.json().catch(err => {
+
+        console.log(`FILE ERR: ${err}`);
+        return null;
+
+    });
+
+    if (!Teams) return null;
+
+    return Teams[TeamID] ?? null;
+
+}
+
+export async function RegisterTeam(TeamID: string, TeamName: string): Promise<boolean> {
+
+    const File = Bun.file("./storage/teams.json");
+
+    const StoredTeams = await File.json().catch(err => {
+
+        console.log(`FILE ERR: ${err}`);
+        return null;
+
+    });
+
+    if (!StoredTeams) return false;
+
+    StoredTeams[TeamID] = {
+
+        TeamID: TeamID,
+        TeamName: TeamName,
+        CurrentScore: 0
+
+    };
+
+    return await Bun.write(File, JSON.stringify(StoredTeams)).catch(err => {
+
+        console.log(`FILE ERR: ${err}`);
+        return false;
+
+    }).then(() => { return true; });
+
+}
+
+export async function DeleteTeam(TeamID: string): Promise<boolean> {
+
+    const File = Bun.file("./storage/teams.json");
+
+    const StoredTeams = await File.json().catch(err => {
+
+        console.log(`FILE ERR: ${err}`);
+        return null;
+
+    });
+
+    if (!StoredTeams) return false;
+
+    delete StoredTeams[TeamID];
+
+    return await Bun.write(File, JSON.stringify(StoredTeams)).catch(err => {
+
+        console.log(`FILE ERR: ${err}`);
+        return false;
+
+    }).then(() => { return true; });
 
 }

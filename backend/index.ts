@@ -1,13 +1,19 @@
 // Scoreboard for the StagHack Competition, 2024
 
+import { EventEmitter } from "events";
+
 import express from 'express';
+import ws from 'express-ws';
+
 import { router } from "express-file-routing";
 
 import cors from 'cors';
 
 import { port } from "./config.json"
 
-const app = express();
+const ScoreOrTeamChangedEmitter = new EventEmitter();
+
+const { app } = ws(express());
 
 app.use(express.static('../frontend/')); // For serving HTML files
 
@@ -25,7 +31,7 @@ app.use((req, _res, next) => {
 
 });
 
-app.use("/", await router()); // For serving files from the "routes" folder
+app.use("/", await router({ additionalMethods: ["ws"] })); // For serving files from the "routes" folder
 
 console.log("INFO: Loaded all routes from the /routes directory.");
 
@@ -47,6 +53,7 @@ app.use((_req, res) => {
 
 });
 
+export { ScoreOrTeamChangedEmitter }; // Export the event emitter for use in other files
 
 
 

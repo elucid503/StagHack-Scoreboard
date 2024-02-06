@@ -29,11 +29,11 @@ async function MakeRequestToBackend(Route, Argument = null){
 
 }
 
-// Update with current score
+// Update with current teams
 
 const Elements = {
 
-    Score: $("#score"),
+    Score: $("#teams"),
     Increment: $(".button.increment"),
 
 }
