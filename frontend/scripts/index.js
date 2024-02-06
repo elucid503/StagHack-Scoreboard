@@ -1,22 +1,54 @@
 const Routes = {
 
-    GetScore: { Url: "http://localhost:1337/api/score", Method: "GET", Args: 0 },
-    IncrementScore: { Url: "http://localhost:1337/api/score", Method: "PATCH", Args: 1 },
-    ChangeScore: { Url: "http://localhost:1337/api/score", Method: "POST", Args: 1 },
+    GetAllScores: { Url: "http://localhost:1337/api/teams", Method: "GET" },
+    UpdateTeamScore: { Url: "http://localhost:1337/api/teams/update", Method: "PATCH" },
+
+    CreateTeam: { Url: "http://localhost:1337/api/teams/create", Method: "POST" },
+    DeleteTeam: { Url: "http://localhost:1337/api/teams/delete", Method: "POST" }, // Should be a delete method but using post for now
 
 }
 
-async function MakeRequestToBackend(Route, Argument = null){
+const Elements = {
 
-    const response = await fetch(`${Route.Url}${Argument ? `/${Argument}` : ""}`, {
+    Teams: $(".teams"),
+    Increment: $(".button.increment"),
+
+    ErrorMessage: $(".error-container"),
+    ErrorBackdrop: $(".error-backdrop"),
+
+    NoTeams: $(".no-teams"),
+
+}
+
+function ShowError(Message) {
+
+    Elements.ErrorBackdrop.fadeIn(500);
+    Elements.ErrorMessage.fadeIn(500);
+
+    const ErrorMessage = Elements.ErrorMessage.find(".error-text");
+
+    ErrorMessage.text(Message);
+
+    setTimeout(() => {
+
+        Elements.ErrorBackdrop.fadeOut(500);
+        Elements.ErrorMessage.fadeOut(500);
+
+    }, 3000);
+
+}
+
+async function MakeRequestToBackend(Route, Body){
+
+    const response = await fetch(`${Route.Url}`, {
 
         method: Route.Method,
         headers: { "Content-Type": "application/json" },
+        body: Body ? JSON.stringify(Body) : null,
 
     }).catch((error) => {
 
         console.error(error);
-
         console.log(`REQUEST ERR: ${error}`);
 
     });
@@ -29,94 +61,131 @@ async function MakeRequestToBackend(Route, Argument = null){
 
 }
 
-// Update with current teams
+function HandleTeamsUpdate(Teams) {
 
-const Elements = {
+    Teams.sort((a, b) => b.CurrentScore - a.CurrentScore);
 
-    Score: $("#teams"),
-    Increment: $(".button.increment"),
+    Teams.forEach((team) => {
 
-}
+        const HTML = `<div class="team-name">${team.TeamName}</div>
+            <div class="team-score">${team.CurrentScore}</div>`
 
-function ValidateResponse(Response){
+        const Element = document.createElement("div");
+        Element.className = "team";
+        Element.dataset.score = team.CurrentScore;
+        Element.id = team.TeamID;
 
-    if (Response?.Error) {
+        Element.innerHTML = HTML;
 
-        Elements.Score.text(Response.Error);
-        return;
-
-    }
-
-    else if (Response.Score === undefined) {
-
-        Elements.Score.text("Error: Score is Unavailable");
-        return;
-
-    }
-
-    Elements.Score.text(Response.Score);
-
-}
-
-async function GetScore(){
-
-    const response = await MakeRequestToBackend(Routes.GetScore);
-
-    ValidateResponse(response);
-
-}
-
-async function IncrementScore(Direction = "Forward"){
-
-    const response = await MakeRequestToBackend(Routes.IncrementScore, Direction);
-
-    ValidateResponse(response);
-
-}
-
-// Not used, yet
-
-// async function ChangeScore(NewScore = 0){
-//
-//     const response = await MakeRequestToBackend(Routes.ChangeScore, NewScore);
-//
-//     if (response?.error) {
-//
-//         Elements.Score.text(response.Error);
-//         return;
-//
-//     }
-
-//     else if (!response?.Score) {
-
-//         Elements.Score.text("Error: Score is Unavailable");
-
-//         return;
-
-//     }
-//
-//     Elements.Score.text(response.Score);
-//
-// }
-
-// Update Score
-
-GetScore().then(() => {});
-
-// Event listeners
-Elements.Increment.each((index, element) => {
-
-    $(element).click(async (event) => {
-
-        const target = $(event.target);
-
-        await IncrementScore(target.attr("data-direction"));
+        Elements.Teams.append(Element);
 
     });
 
-});
+    if (Teams.length < 1) {
 
+        Elements.NoTeams.show();
 
+    }
+
+    else {
+
+        Elements.NoTeams.hide();
+
+    }
+
+    StyleTeams();
+
+}
+
+async function GetAllTeams() {
+
+    const response = await MakeRequestToBackend(Routes.GetAllScores);
+
+    if (!response) {
+
+        ShowError("Failed to get initial scores from the API.");
+        return;
+
+    }
+
+    const Teams = response.Teams;
+
+    // Sort by score
+
+    HandleTeamsUpdate(Teams);
+
+}
+
+GetAllTeams().then(() => {});
+
+// connect to websocket to listen for updates
+
+function InitWebSocket() {
+
+    const socket = new WebSocket("ws://localhost:1337/api/listen");
+
+    socket.onopen = () => {
+
+        console.log("Connected to websocket");
+
+    }
+
+    socket.onmessage = (event) => {
+
+        // Assume new teams are added, updated or received
+
+        const data = JSON.parse(event.data);
+
+        if (data.Teams) {
+
+            Elements.Teams.empty();
+            HandleTeamsUpdate(data.Teams);
+
+        }
+
+    }
+
+}
+
+function StyleTeams() { // Assumes all teams are placed
+
+    const Teams = $(".team");
+
+    // Loop through all teams
+
+    const TeamsWithScores = [];
+
+    Teams.each((index, team) => {
+
+        const score = parseInt(team.dataset.score || "0");
+
+        TeamsWithScores.push({ Element: team, Score: score });
+
+    });
+
+    // Get top 3
+
+    TeamsWithScores.sort((a, b) => b.Score - a.Score);
+
+    if (TeamsWithScores.length < 3) return;
+
+    const Top3 = TeamsWithScores.slice(0, 3);
+
+    // Style top 3
+
+    const First = $(Top3[0].Element);
+    const Second = $(Top3[1].Element);
+    const Third = $(Top3[2].Element);
+
+    // Adjust for gold, bronze, silver box shadow
+
+    First.css("box-shadow", "0 0 50px 2px rgba(255, 245, 0, 0.1)");
+    Second.css("box-shadow", "0 0 50px 2px rgba(192, 192, 192, 0.2)");
+    Third.css("box-shadow", "0 0 50px 2px rgba(205, 127, 60, 0.15)");
+
+}
+
+StyleTeams();
 
 
 

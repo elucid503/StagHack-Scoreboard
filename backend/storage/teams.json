@@ -1,1 +1,36 @@
-[]
+[
+
+  {
+
+    "TeamID": "1",
+    "TeamName": "Team 1",
+    "CurrentScore": "3",
+    "Color": "#C7D59F"
+
+  },
+
+  {
+
+    "TeamID": "1",
+    "TeamName": "Team 1",
+    "CurrentScore": "4"
+
+  },
+
+  {
+
+    "TeamID": "1",
+    "TeamName": "Team 1",
+    "CurrentScore": "2"
+
+  },
+
+  {
+
+    "TeamID": "1",
+    "TeamName": "Team 1",
+    "CurrentScore": "1"
+
+  }
+
+]

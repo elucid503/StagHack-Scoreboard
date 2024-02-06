@@ -19,7 +19,7 @@ export const get = async (req: Request, res: Response) => {
     const Teams = await GetAllTeams();
 
     res.json({
-        Scores: Teams
+        Teams: Teams
     });
 
 }

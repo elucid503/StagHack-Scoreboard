@@ -10,8 +10,8 @@
     --color-text: #eaeefc;
     --color-text-secondary: #b3b3b3;
 
-    --color-accent: #deccf8;
-    --color-accent-secondary: #eee4fd;
+    --color-accent: #ccdff8;
+    --color-accent-secondary: #d9c9fc;
 
     --border-radius-large: 15px;
     --border-radius-medium: 10px;
@@ -43,7 +43,55 @@ hl {
 
 }
 
-.title-container, .score-display {
+.error-container {
+
+    display: flex;
+    position: absolute;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
+    left: 0; right: 0; top: 0; bottom: 0;
+
+    width: fit-content;
+    height: fit-content;
+
+    background-color: var(--color-secondary);
+    border-radius: var(--border-radius-large);
+
+    padding: 25px;
+
+    z-index: 5;
+
+}
+
+.error-backdrop {
+
+    position: absolute;
+    width: 100%; height: 100%;
+
+    z-index: 2;
+
+    top: 0; left: 0;
+
+    border-radius: var(--border-radius-large);
+
+    backdrop-filter: blur(5px);
+
+}
+
+.error-title {
+
+    font-size: var(--font-size-large);
+    color: #f8cccc;
+
+    margin-bottom: 1rem;
+
+}
+
+.title-container {
 
     margin-left: auto; margin-right: auto;
     justify-content: center; align-items: center;
@@ -76,16 +124,79 @@ hl {
 
 }
 
-.score-display {
+.teams {
 
-    font-size: var(--font-size-large);
+    /*Wrap*/
+
+    flex-wrap: wrap;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 2rem;
+    padding: 15px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    width: fit-content;
 
 }
 
-.score-display .score-text {
+.no-teams {
 
     font-size: var(--font-size-medium);
+    color: var(--color-text-secondary);
+
+    margin-top: 2rem;
+
+    text-align: center;
+
+}
+
+.no-teams i {
+
+    font-size: 100px;
+    color: var(--color-text-secondary);
+
     margin-bottom: 1rem;
+
+}
+
+.team {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    max-width: 400px;
+    height: 75px;
+
+    margin: 1rem;
+
+    padding: 55px 60px;
+
+    background-color: var(--color-secondary);
+    border-radius: var(--border-radius-large);
+
+}
+
+.team-name {
+
+    font-size: var(--font-size-medium);
+    line-break: anywhere;
+    text-align: center;
+
+}
+
+.team-score {
+
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: bold;
+
+    margin-top: 1rem;
 
 }
 

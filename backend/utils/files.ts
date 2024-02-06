@@ -1,12 +1,5 @@
 import Bun from "bun";
-
-export interface Team {
-
-    TeamID: string;
-    TeamName: string;
-    CurrentScore: number;
-
-}
+import {Team} from "../structs/team.ts";
 
 export async function UpdateScore(TeamID: string, NewScore: number): Promise<boolean> {
 
@@ -66,23 +59,6 @@ export async function GetAllTeams(): Promise<Team[]> {
 
 }
 
-export async function GetTeam(TeamID: string): Promise<Team | null> {
-
-    const File = Bun.file("./storage/teams.json");
-
-    const Teams = await File.json().catch(err => {
-
-        console.log(`FILE ERR: ${err}`);
-        return null;
-
-    });
-
-    if (!Teams) return null;
-
-    return Teams[TeamID] ?? null;
-
-}
-
 export async function RegisterTeam(TeamID: string, TeamName: string): Promise<boolean> {
 
     const File = Bun.file("./storage/teams.json");
@@ -100,9 +76,9 @@ export async function RegisterTeam(TeamID: string, TeamName: string): Promise<bo
 
         TeamID: TeamID,
         TeamName: TeamName,
-        CurrentScore: 0
+        CurrentScore: 0,
 
-    };
+    } satisfies Team;
 
     return await Bun.write(File, JSON.stringify(StoredTeams)).catch(err => {
 

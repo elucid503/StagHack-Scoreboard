@@ -13,6 +13,10 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <!-- Boxicons -->
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <!-- Page Scripts -->
 
     <script src="../scripts/index.js" type="module"></script>
@@ -24,6 +28,15 @@ I generally don't like big bulky frameworks like next.js or react/angular, espec
 
 <body>
 
+        <div class="error-backdrop" style="display: none"></div>
+
+        <div class="error-container" style="display: none">
+
+            <div class="error-title">Error</div>
+            <div class="error-text">Error content here</div>
+
+        </div>
+
         <div class="title-container">
 
             <div class="title-text">2024 StagHack</div>
@@ -31,21 +44,33 @@ I generally don't like big bulky frameworks like next.js or react/angular, espec
 
         </div>
 
-        <div class="score-display">
+        <div class="teams">
 
-            <div class="score-text">Current Score</div>
-            <div class="score-value" id="score">Not Available</div>
+            <div class="no-teams" style="display: none">
 
-            <hl></hl> <!-- Horizontal Line -->
-
-            <div class="score-controls">
-
-                <div class="button increment" data-direction="up">Add</div>
-                <div class="button increment" data-direction="down">Subtract</div>
+                <i class='bx bxs-folder-open'></i>
+                <div class="no-teams-text">There are no teams, yet.</div>
 
             </div>
 
+
         </div>
+
+<!--        <div class="score-display">-->
+
+<!--            <div class="score-text">Current Score</div>-->
+<!--            <div class="score-value" id="score">Not Available</div>-->
+
+<!--            <hl></hl> &lt;!&ndash; Horizontal Line &ndash;&gt;-->
+
+<!--            <div class="score-controls">-->
+
+<!--                <div class="button increment" data-direction="up">Add</div>-->
+<!--                <div class="button increment" data-direction="down">Subtract</div>-->
+
+<!--            </div>-->
+
+<!--        </div>-->
 
 </body>
 
