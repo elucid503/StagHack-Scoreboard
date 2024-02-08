@@ -9,7 +9,7 @@
     "bun-types": "latest"
   },
   "scripts": {
-    "start": "../build/build && bun run index.ts"
+    "start": "bun run index.ts"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
