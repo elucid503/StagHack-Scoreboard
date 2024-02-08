@@ -1,8 +1,8 @@
 const Routes = {
-    GetAllScores: { Url: "http://localhost:1337/api/teams", Method: "GET" },
-    UpdateTeamScore: { Url: "http://localhost:1337/api/teams/update", Method: "PATCH" },
-    CreateTeam: { Url: "http://localhost:1337/api/teams/create", Method: "POST" },
-    DeleteTeam: { Url: "http://localhost:1337/api/teams/delete", Method: "POST" }, // Make DELETE in the future
+    GetAllScores: { Url: "http://20.62.163.94:1337/api/teams", Method: "GET" },
+    UpdateTeamScore: { Url: "http://20.62.163.94:1337/api/teams/update", Method: "PATCH" },
+    CreateTeam: { Url: "http://20.62.163.94:1337/api/teams/create", Method: "POST" },
+    DeleteTeam: { Url: "http://20.62.163.94:1337/api/teams/delete", Method: "POST" }, // Make DELETE in the future
 };
 
 const Elements = {
@@ -141,7 +141,7 @@ function CreateControlButtons(TeamID) {
 
 function InitWebSocket() {
 
-    const socket = new WebSocket("ws://localhost:1337/api/listen");
+    const socket = new WebSocket("ws://20.62.163.94:1337/api/listen");
     socket.onmessage = event => {
         const { Teams } = JSON.parse(event.data);
         if (Teams) HandleTeamsUpdate(Teams);
