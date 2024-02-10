@@ -44,4 +44,12 @@ export const ws = async (ws: WebSocket) => {
 
     });
 
+    ws.on("message", (message: string) => {
+
+        // Assume ping
+
+        ws.send(JSON.stringify({ Status: 200, Message: "Pong" }));
+
+    });
+
 }

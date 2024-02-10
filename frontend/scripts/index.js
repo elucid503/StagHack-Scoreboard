@@ -149,6 +149,10 @@ function InitWebSocket() {
     };
     socket.onerror = () => ShowError("We ran into a WebSocket-related error.");
 
+    // Ping the server every 30 seconds to keep the connection alive
+
+    setInterval(() => socket.send(JSON.stringify({ "Message": "Ping" })), 30000);
+
 }
 
 function StyleTeams() {
